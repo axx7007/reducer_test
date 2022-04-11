@@ -1,6 +1,6 @@
 import React, { useReducer, useState } from "react";
 import Todos from "./Todos";
-export const ReducerTodo = () => {
+const ReducerTodo = () => {
   const [name, setName] = useState("");
 
   const reducer = (state, action) => {
@@ -10,28 +10,30 @@ export const ReducerTodo = () => {
           ...state,
           { id: Date.now(), name: action.payload.name, completed: false },
         ];
-      default:
-        return state;
     }
   };
-
   const [todos, dispatch] = useReducer(reducer, []);
-  const OnInput = (e) => {
-    setName(e.target.value);
-  };
 
   const onAdd = () => {
-    dispatch({ type: "add", payload: { name: name } });
+    if (name.length > 0) {
+      dispatch({ type: "add", payload: { name: name } });
+    }
+    setName("");
   };
   return (
     <div>
-      <input type="text" value={name} onChange={OnInput} />
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
       <button onClick={onAdd}>Add</button>
 
       {todos.map((value) => {
-        return <Todos key={value.id} value={value} />;
+        return <Todos value={value} />;
       })}
     </div>
   );
 };
+
 export default ReducerTodo;
